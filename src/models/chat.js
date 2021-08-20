@@ -23,6 +23,10 @@ const ChatSchema = mongoose.Schema({
     nameChat: {
         type:String,
         required:true,
+    },
+    nameChatTwo: {
+        type:String,
+        required:true,
     }
 })
 

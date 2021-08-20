@@ -2,7 +2,7 @@ const Chat = require("../models/chat");
 const mongoose = require("mongoose");
 
 const createChat = async (req, res) => {
-  const { userOne, userTwo, nameChat } = req.body;
+  const { userOne, userTwo, nameChat,nameChatTwo} = req.body;
   try {
     const newChat = new Chat({ userOne, userTwo, message: [], nameChat });
     const savedChat = await newChat.save();
@@ -48,6 +48,7 @@ const getChat = async (req, res) => {
         id: chat.userOne === id ? chat.userTwo : chat.userOne,
         messages: chat.message,
         nameChat: chat.nameChat,
+        nameChatTwo: chat.nameChatTwo
       };
     });
     res.send(chats);
