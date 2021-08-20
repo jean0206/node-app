@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const createChat = async (req, res) => {
   const { userOne, userTwo, nameChat,nameChatTwo} = req.body;
   try {
-    const newChat = new Chat({ userOne, userTwo, message: [], nameChat });
+    const newChat = new Chat({ userOne, userTwo, message: [], nameChat,nameChatTwo});
     const savedChat = await newChat.save();
     res.send({ message: "Buenas" });
   } catch (error) {
