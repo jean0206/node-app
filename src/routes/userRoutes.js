@@ -9,7 +9,7 @@ router.post('/product',userController.addProduct);
 router.post("/products/",userController.getAllProducts)
 router.post("/edit",userController.editUser)
 router.get('/',(req, res) => {
-    res.send({api:'968e555690bacacb65bacea139d0870b'})
+    res.send({api:'97e02540ec458f658041f52d243c8e0c'})
 })
 /*
 router.get('/:huaweiId/type',userController.verifyType);
