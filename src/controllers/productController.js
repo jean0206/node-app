@@ -25,7 +25,7 @@ const addProduct = async (req, res) => {
       photos,
       country,
       city,
-      actual:'En oferta',
+      actual: "En oferta",
       state,
     });
     const producSaved = await newProduct.save();
@@ -46,7 +46,7 @@ const getAllProduct = async (req, res) => {
           city: city,
           country: country,
           state: state,
-          actual:{$ne:'No disponible'}
+          actual: { $ne: "No disponible" },
         },
       ],
     });
@@ -57,15 +57,8 @@ const getAllProduct = async (req, res) => {
 };
 
 const addOffert = async (req, res) => {
-  const {
-    productId,
-    name,
-    photos,
-    price,
-    description,
-    ownerId,
-    ownerName,
-  } = req.body;
+  const { productId, name, photos, price, description, ownerId, ownerName } =
+    req.body;
   try {
     const newOffert = new Offert({
       productId,
@@ -73,7 +66,7 @@ const addOffert = async (req, res) => {
       photos,
       price,
       description,
-      state:"Enviada",
+      state: "Enviada",
       ownerId,
       ownerName,
     });
@@ -83,57 +76,80 @@ const addOffert = async (req, res) => {
 };
 
 const acceptOffert = async (req, res) => {
-  const {id, productId} = req.body;
+  const { id, productId } = req.body;
   try {
-    const offert = await Offert.findOne({_id:id})
-    offert.state = "Aceptada"
-    const savedOffert = await offert.save()
-    const product = await Product.findOne({_id:productId})
-    product.actual = "No disponible"
-    const savedProduct = await product.save()
-    const changesOfferts = await Offert.updateMany({$and:[{_id:{$ne:id}},{productId:productId}]},{state:'Rechazada'})
-    res.send(savedOffert)
+    const offert = await Offert.findOne({ _id: id });
+    offert.state = "Aceptada";
+    const savedOffert = await offert.save();
+    const product = await Product.findOne({ _id: productId });
+    product.actual = "No disponible";
+    const savedProduct = await product.save();
+    const changesOfferts = await Offert.updateMany(
+      { $and: [{ _id: { $ne: id } }, { productId: productId }] },
+      { state: "Rechazada" }
+    );
+    res.send(savedOffert);
   } catch (error) {
-      res.send(error.message)
+    res.send(error.message);
   }
-}
+};
 
 const refuseOffert = async (req, res) => {
-  const {id, productId} = req.body;
+  const { id, productId } = req.body;
   try {
-    const offert = await Offert.findOne({_id:id})
-    offert.state = "Rechazada"
-    const savedOffert = await offert.save()
-    res.send(savedOffert)
+    const offert = await Offert.findOne({ _id: id });
+    offert.state = "Rechazada";
+    const savedOffert = await offert.save();
+    res.send(savedOffert);
   } catch (error) {
-      res.send(error.message)
+    res.send(error.message);
   }
-}
+};
 
 const getOffert = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
   try {
-    const offertNot = await Offert.find({productId: id,state:'Aceptada'})
-    if(offertNot.length === 0) {
-      const offerts = await Offert.find({productId:id})
-      res.send({offerts: offerts})
-    }else{
-      res.send({offerts:[]})
+    const offertNot = await Offert.find({ productId: id, state: "Aceptada" });
+    if (offertNot.length === 0) {
+      const offerts = await Offert.find({ productId: id });
+      res.send({ offerts: offerts });
+    } else {
+      res.send({ offerts: [] });
     }
   } catch (error) {
-    res.send({message: error.message})
+    res.send({ message: error.message });
   }
-}
+};
+
+const getAllOfferts = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const allOfferts = await Offert.find({ ownerId: id });
+    res.send({ allOfferts });
+  } catch (error) {
+    res.send({ message: error.message });
+  }
+};
 
 const getProducts = async (req, res) => {
-    const {id} = req.params
-    try {
-        const products = await Product.find({ownerId:id,actual:{$ne:'No disponible'}})
-        console.log((products))
-        res.send({products: products})
-    } catch (error) {
-      
-    }
-}
+  const { id } = req.params;
+  try {
+    const products = await Product.find({
+      ownerId: id,
+      actual: { $ne: "No disponible" },
+    });
+    console.log(products);
+    res.send({ products: products });
+  } catch (error) {}
+};
 
-module.exports = { addProduct, getAllProduct, addOffert, getOffert, getProducts, acceptOffert, refuseOffert};
+module.exports = {
+  addProduct,
+  getAllProduct,
+  addOffert,
+  getOffert,
+  getProducts,
+  acceptOffert,
+  refuseOffert,
+  getAllOfferts,
+};
